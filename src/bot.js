@@ -1,20 +1,36 @@
 const { Telegraf } = require('telegraf');
+require('dotenv').config()
+const axios = require('axios')
 
-const bot = new Telegraf('5977297894:AAF2MF9fR1m9ridIBjAX0HhSKC0W6w1O7s0');
-bot.start((ctx) => ctx.reply('Welcome'));
-bot.help((ctx) => ctx.reply('Send me a sticker'));
-bot.on('sticker', (ctx) => ctx.reply('👍'));
-bot.on ('message',(ctx) => {
-    console.log('message from:', ctx.from.username)
+const bot = new Telegraf(process.env.DMAX1447_BOT_TOKEN);
+
+bot.on('message', async (ctx) => {
     console.log('message:', ctx.message)
-    if (ctx.message.text.includes('жид')) {
-        ctx.reply('хайль гителер!')
-    }
-    if (ctx.from.username === 'VladFilatoff') {
-        ctx.reply('Я тебя узнал, сраный Капитан Америка!')
+    if(ctx.message.text.includes('dmax1447_bot')) {
+        try {
+            const result = await axios.post(
+                'https://api.openai.com/v1/completions',
+                {
+                    "model": "text-davinci-003",
+                    "prompt": ctx.message.text,
+                    "max_tokens": 4000,
+                    "temperature": 1.0
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer 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'
+                    },
+                }
+            ).then(responce => responce.data)
+            console.log(result)
+            ctx.reply(result.choices[0].text)
+        } catch (e) {
+
+        }
 
     }
-    ctx.reply('kill all humans')
+
 })
 
 bot.hears('hi', (ctx) => ctx.reply('white power!'));
