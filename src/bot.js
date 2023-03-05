@@ -19,14 +19,14 @@ bot.on('message', async (ctx) => {
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer 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'
+                        'Authorization': `Bearer ${process.env.CHAT_TOKEN}`
                     },
                 }
             ).then(responce => responce.data)
             console.log(result)
             ctx.reply(result.choices[0].text)
         } catch (e) {
-
+            console.log(e)
         }
 
     }
