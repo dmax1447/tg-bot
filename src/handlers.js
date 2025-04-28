@@ -34,8 +34,9 @@ function imageCommandHandler(ctx) {
 
 async function messageHandler(ctx) {
   const replyUser = ctx.message.reply_to_message && ctx.message.reply_to_message.from.username
+  const isPrivateChat = ctx.chat.type === "private"
   const messageText = ctx.message.text || ''
-  const shouldReply = messageText.includes('dmax1447_bot') || replyUser === 'dmax1447_bot'
+  const shouldReply = messageText.includes('dmax1447_bot') || replyUser === 'dmax1447_bot' || isPrivateChat
   // console.log('raw message:', ctx.message)
   // console.log({replyUser, messageText, shouldReply})
 
@@ -62,7 +63,7 @@ async function messageHandler(ctx) {
     const result = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: "gpt-4o",
+        model: "gpt-4.5-preview-2025-02-27",
         max_tokens: 512,
         messages
       },
@@ -79,7 +80,6 @@ async function messageHandler(ctx) {
     messages.push(systemMessage)
     ctx.reply(systemMessage.content)
   } catch (e) {
-    console.log(e.message)
     ctx.reply(`Ошибка генерации ответа: ${e.message}`)
   }
 }

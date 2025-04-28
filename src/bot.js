@@ -1,5 +1,4 @@
 const {Telegraf} = require('telegraf');
-const axios = require('axios')
 const dotenv = require('dotenv')
 const {messageHandler, commandClearHandler, imageCommandHandler} = require('./handlers')
 
